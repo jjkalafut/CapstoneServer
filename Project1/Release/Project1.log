@@ -1,0 +1,17 @@
+﻿Build started 11/13/2014 5:24:31 PM.
+     1>Project "C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Project1\Project1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         G:\Programs\Visual Studio 2013\VC\bin\CL.exe /c /I"C:\Program Files (x86)\jthread\include" /I"H:\jrtplib-3.9.1\build\src" /I"H:\jrtplib-3.9.1\src" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D "CMAKE_INDIR=\"Release\"" /D _MBCS /Gm- /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib MyForm.cpp
+         MyForm.cpp
+     1>MyForm.cpp(78): warning C4101: 'idx3' : unreferenced local variable
+       Link:
+         G:\Programs\Visual Studio 2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Release\Project1.exe" /NOLOGO ..\jrtplib.lib ..\jthread.lib "C:\Program Files (x86)\jthread\lib\jthread.lib" ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /ASSEMBLYRESOURCE:Release\Project1.MyForm.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Release\Project1.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Release\Project1.lib" /MACHINE:X86 /SAFESEH Release\stdafx.obj
+         Release\MyForm.obj
+         Generating code
+         Finished generating code
+         Project1.vcxproj -> C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Release\Project1.exe
+     1>Done Building Project "C:\Users\John\Documents\Visual Studio 2013\Projects\Project1\Project1\Project1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.48
