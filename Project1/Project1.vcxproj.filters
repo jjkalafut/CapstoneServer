@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\Quadratic Equation C1\QuadraticEquation\stdafx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="pandaheader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

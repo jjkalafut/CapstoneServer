@@ -23,7 +23,7 @@ namespace Project1 {
 			//
 		}
 		void send_packet();
-		void checkSrc();
+		void pollPackets();
 
 	protected:
 		/// <summary>
