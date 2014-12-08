@@ -1,3 +1,17 @@
+//#include "rtpsession.h"
+//#include "rtpudpv4transmitter.h"
+#include "rtpipv4address.h"
+//#include "rtpsessionparams.h"
+//#include "rtperrors.h"
+//#include "rtppacket.h"
+#ifndef WIN32
+	#include <netinet/in.h>
+	#include <arpa/inet.h>
+#else
+	#include <winsock2.h>
+#endif // WIN32
+
+//#include "timer.h"
 
 #pragma once
 namespace Project1 {
@@ -8,6 +22,7 @@ namespace Project1 {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Runtime::InteropServices;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -24,6 +39,7 @@ namespace Project1 {
 		}
 		void send_packet();
 		void pollPackets();
+		void set_address( UINT addr);
 
 	protected:
 		/// <summary>
@@ -55,12 +71,17 @@ namespace Project1 {
 	private: System::Windows::Forms::Button^  button2;
 	private: System::Windows::Forms::Button^  button3;
 	private: System::Windows::Forms::Button^  button4;
+	private: System::Windows::Forms::ToolStripMenuItem^  setAddressToolStripMenuItem;
+	private: System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Timer^  timer1;
+	private: System::ComponentModel::IContainer^  components;
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -69,6 +90,7 @@ namespace Project1 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->Clients = (gcnew System::Windows::Forms::ListBox());
@@ -81,6 +103,7 @@ namespace Project1 {
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->startServerToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->stopServerToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->setAddressToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->toolsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->getHelpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
@@ -88,6 +111,9 @@ namespace Project1 {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -96,7 +122,7 @@ namespace Project1 {
 			// 
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20));
-			this->label1->Location = System::Drawing::Point(-6, 38);
+			this->label1->Location = System::Drawing::Point(28, 38);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(273, 31);
 			this->label1->TabIndex = 0;
@@ -107,12 +133,14 @@ namespace Project1 {
 			this->Clients->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->Clients->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->Clients->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12));
 			this->Clients->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
 			this->Clients->FormattingEnabled = true;
+			this->Clients->ItemHeight = 20;
 			this->Clients->Location = System::Drawing::Point(36, 88);
 			this->Clients->Name = L"Clients";
-			this->Clients->Size = System::Drawing::Size(383, 208);
+			this->Clients->Size = System::Drawing::Size(383, 200);
 			this->Clients->TabIndex = 1;
 			this->Clients->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::Clients_SelectedIndexChanged);
 			// 
@@ -121,13 +149,15 @@ namespace Project1 {
 			this->Devices->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->Devices->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->Devices->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12));
 			this->Devices->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
 			this->Devices->FormattingEnabled = true;
-			this->Devices->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Living Room", L"Hallway", L"Bedroom" });
+			this->Devices->ItemHeight = 20;
+			this->Devices->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Living Room \0", L"Hallway \0", L"Bedroom \0" });
 			this->Devices->Location = System::Drawing::Point(535, 88);
 			this->Devices->Name = L"Devices";
-			this->Devices->Size = System::Drawing::Size(388, 208);
+			this->Devices->Size = System::Drawing::Size(388, 200);
 			this->Devices->TabIndex = 2;
 			// 
 			// menuStrip1
@@ -175,9 +205,9 @@ namespace Project1 {
 			// 
 			// helpToolStripMenuItem
 			// 
-			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->startServerToolStripMenuItem,
-					this->stopServerToolStripMenuItem
+					this->stopServerToolStripMenuItem, this->setAddressToolStripMenuItem
 			});
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(48, 20);
@@ -186,14 +216,23 @@ namespace Project1 {
 			// startServerToolStripMenuItem
 			// 
 			this->startServerToolStripMenuItem->Name = L"startServerToolStripMenuItem";
-			this->startServerToolStripMenuItem->Size = System::Drawing::Size(133, 22);
+			this->startServerToolStripMenuItem->Size = System::Drawing::Size(135, 22);
 			this->startServerToolStripMenuItem->Text = L"Start Server";
+			this->startServerToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::startServerToolStripMenuItem_Click);
 			// 
 			// stopServerToolStripMenuItem
 			// 
 			this->stopServerToolStripMenuItem->Name = L"stopServerToolStripMenuItem";
-			this->stopServerToolStripMenuItem->Size = System::Drawing::Size(133, 22);
+			this->stopServerToolStripMenuItem->Size = System::Drawing::Size(135, 22);
 			this->stopServerToolStripMenuItem->Text = L"Stop Server";
+			this->stopServerToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::stopServerToolStripMenuItem_Click);
+			// 
+			// setAddressToolStripMenuItem
+			// 
+			this->setAddressToolStripMenuItem->Name = L"setAddressToolStripMenuItem";
+			this->setAddressToolStripMenuItem->Size = System::Drawing::Size(135, 22);
+			this->setAddressToolStripMenuItem->Text = L"Set Address";
+			this->setAddressToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::setAddressToolStripMenuItem_Click);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -211,7 +250,7 @@ namespace Project1 {
 			// pictureBox1
 			// 
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(289, 32);
+			this->pictureBox1->Location = System::Drawing::Point(336, 32);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(100, 50);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -268,12 +307,36 @@ namespace Project1 {
 			this->button4->UseVisualStyleBackColor = false;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14));
+			this->label2->Location = System::Drawing::Point(569, 45);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(131, 24);
+			this->label2->TabIndex = 9;
+			this->label2->Text = L"My IP Address";
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(747, 49);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(166, 20);
+			this->textBox1->TabIndex = 10;
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox1_TextChanged);
+			// 
+			// timer1
+			// 
+			this->timer1->Tick += gcnew System::EventHandler(this, &MyForm::timer1_Tick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(962, 441);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->label2);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
@@ -309,7 +372,29 @@ namespace Project1 {
 		this->Close();
 	}
 	private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
-		checkSrc();
+		pollPackets();
+	}
+	private: System::Void setAddressToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		
+	}
+	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		IntPtr ptrToNativeString = Marshal::StringToHGlobalAnsi( this->textBox1->Text );
+		UINT destip;
+		//printf(static_cast<char*>(ptrToNativeString.ToPointer()));
+		//printf("\n");
+		inet_pton(AF_INET, static_cast<char*>(ptrToNativeString.ToPointer()), &destip);
+		destip = ntohl(destip);
+		set_address(destip);
+	}
+	private: System::Void startServerToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->timer1->Interval = 2;
+		this->timer1->Start();
+	}
+	private: System::Void stopServerToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->timer1->Stop();
+	}
+	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
+		pollPackets();
 	}
 };
 }

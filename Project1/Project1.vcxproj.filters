@@ -32,7 +32,7 @@
     <ClInclude Include="..\..\Quadratic Equation C1\QuadraticEquation\stdafx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="pandaheader.h">
+    <ClInclude Include="..\..\CapstoneHeaders\pandaheader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

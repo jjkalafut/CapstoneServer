@@ -96,12 +96,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\CapstoneHeaders\pandaheader.h" />
     <ClInclude Include="..\..\Quadratic Equation C1\QuadraticEquation\resource.h" />
     <ClInclude Include="..\..\Quadratic Equation C1\QuadraticEquation\stdafx.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="pandaheader.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
