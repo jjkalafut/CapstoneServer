@@ -49,20 +49,18 @@ void checkerror(int rtperr)
 	}
 }
 
-void MyForm::send_packet(){
-	printf("\nSending packet \n");
-	checkerror( sess.SendPacket((void *)"1234567890", 10, 0, false, 10) );
-}
 void forwardAudio( RTPPacket * pack){
 	int i;
 	pandaPacketData * pd = (pandaPacketData *) (pack->GetPayloadData());
 	sess.ClearDestinations();
 	for (i = 0; i < 10; i++){
 		if (clients_map[pd->cl_array_idx][i] == TRUE){
+			//printf(" sending packets to %u ", devices_addr[i].GetIP());
 			sess.AddDestination(devices_addr[i]);
 		}
 	}
-	sess.SendPacket(&(pd->data), 1000); //todo ensure correct legth
+	//printf("sent audio packets!");
+	sess.SendPacketEx( pack->GetPayloadData(), pack->GetPayloadLength(), AUDIO, 0, 0 ); //todo ensure correct legth
 }
 void send_ack(uint8_t * idx){
 	sess.SendPacketEx(idx, 1, PANDA_ACK, 0, 0);
@@ -104,12 +102,17 @@ void MyForm::pollPackets(){
 				// You can examine the data here
 				//printf("Got packet !\n");
 				switch (header){
-				case AUDIO: { forwardAudio(pack); break; }
+				case AUDIO: { 
+					//printf("got Audio \n ");
+					forwardAudio(pack); 
+					break; 
+				}
 
 				case SET_NAME: {
 					placed = FALSE;
-					printf("Got a name captain... \n");
+					//printf("Got a name captain... \n");
 					sup = (signupPacket *)pack->GetPayloadData();
+					printf("got client at %u \n", sup->address);
 					uint8_t ret;
 					for (idx = 0; idx < num_clients; idx++){
 						if (strcmp(sup->name, client_str[idx]) == 0){
@@ -157,8 +160,10 @@ void MyForm::pollPackets(){
 						}
 					}
 					if (!placed && num_devices < 10){
-						strcpy_s(sup->name, STR_BUFF_SZ, devices_str[num_devices]);
-						memcpy(&devices_addr[num_devices], &RTPIPv4Address(sup->address, 6000), sizeof(RTPIPv4Address));
+						strcpy_s(devices_str[num_devices], STR_BUFF_SZ, sup->name);
+						printf("got device at %u \n", sup->address);
+						RTPIPv4Address tmp = RTPIPv4Address(sup->address, 6000);
+						memcpy(&devices_addr[num_devices], &tmp, sizeof(RTPIPv4Address));
 						ret = num_devices;
 						num_devices++;
 					}
@@ -215,7 +220,7 @@ void MyForm::pollPackets(){
 							//printf(" device %u is %c", dev_idx, sp->selected[dev_idx]);
 							memcpy_s(&clients_map[sp->cl_array_idx][dev_idx], 1, &(sp->selected[dev_idx]), 1);
 							if (clients_map[sp->cl_array_idx][dev_idx] == 1){
-								printf(" now selected device %u \n", dev_idx);
+								printf(" %s selected device %u \n", client_str[sp->cl_array_idx], dev_idx);
 							}
 						}
 					}
@@ -298,18 +303,18 @@ int main(array<System::String ^> ^args)
 	//locals
 	uint16_t portbase, destport;
 	uint32_t destip;
-	int status, i, idx;
+	int status, i;
 
-	num_devices = 10;
+	num_devices = 0;
 	num_clients = 0;
 
 	// Enabling Windows XP visual effects before any controls are created
 	//MessageBox::Show("Oppening a Port to Listen...");
 	//
-	for (idx = 0; idx < NUM_MAX_DEVICES; idx++){
-		sprintf_s(devices_str[idx], "device %i \0", idx);
-		//strcpy_s(, 2, snprint);
-	}
+	//for (idx = 0; idx < NUM_MAX_DEVICES; idx++){
+	//	sprintf_s(devices_str[idx], "device %i \0", idx);
+	//	//strcpy_s(, 2, snprint);
+	//}
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
@@ -355,6 +360,7 @@ int main(array<System::String ^> ^args)
 	//Initialize client strings
 	for (i = 0; i < 10; i++){
 		strcpy_s(client_str[i],"\0");
+		strcpy_s(devices_str[i], "\0");
 	}
 
 

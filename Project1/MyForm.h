@@ -37,7 +37,6 @@ namespace Project1 {
 			//TODO: Add the constructor code here
 			//
 		}
-		void send_packet();
 		void pollPackets();
 		void set_address( UINT addr);
 
@@ -69,8 +68,8 @@ namespace Project1 {
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::Button^  button1;
 	private: System::Windows::Forms::Button^  button2;
-	private: System::Windows::Forms::Button^  button3;
-	private: System::Windows::Forms::Button^  button4;
+
+
 	private: System::Windows::Forms::ToolStripMenuItem^  setAddressToolStripMenuItem;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::TextBox^  textBox1;
@@ -109,8 +108,6 @@ namespace Project1 {
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->button3 = (gcnew System::Windows::Forms::Button());
-			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
@@ -154,7 +151,7 @@ namespace Project1 {
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
 			this->Devices->FormattingEnabled = true;
 			this->Devices->ItemHeight = 20;
-			this->Devices->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Living Room \0", L"Hallway \0", L"Bedroom \0" });
+			//this->Devices->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Living Room \0", L"Hallway \0", L"Bedroom \0" });
 			this->Devices->Location = System::Drawing::Point(535, 88);
 			this->Devices->Name = L"Devices";
 			this->Devices->Size = System::Drawing::Size(388, 200);
@@ -281,32 +278,6 @@ namespace Project1 {
 			this->button2->Text = L"Configure";
 			this->button2->UseVisualStyleBackColor = false;
 			// 
-			// button3
-			// 
-			this->button3->BackColor = System::Drawing::Color::Black;
-			this->button3->FlatAppearance->BorderColor = System::Drawing::Color::Lime;
-			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button3->Location = System::Drawing::Point(36, 357);
-			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(150, 35);
-			this->button3->TabIndex = 7;
-			this->button3->Text = L"Send Test Packet";
-			this->button3->UseVisualStyleBackColor = false;
-			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
-			// 
-			// button4
-			// 
-			this->button4->BackColor = System::Drawing::Color::Black;
-			this->button4->FlatAppearance->BorderColor = System::Drawing::Color::Lime;
-			this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button4->Location = System::Drawing::Point(216, 357);
-			this->button4->Name = L"button4";
-			this->button4->Size = System::Drawing::Size(150, 35);
-			this->button4->TabIndex = 8;
-			this->button4->Text = L"Check Src";
-			this->button4->UseVisualStyleBackColor = false;
-			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
-			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
@@ -334,11 +305,9 @@ namespace Project1 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Black;
-			this->ClientSize = System::Drawing::Size(962, 441);
+			this->ClientSize = System::Drawing::Size(962, 370);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->button4);
-			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->pictureBox1);
@@ -365,15 +334,11 @@ namespace Project1 {
 	private: System::Void Clients_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 		//send_packet();
 	}
-	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
-		send_packet();
-	}
+
 	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->Close();
 	}
-	private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
-		pollPackets();
-	}
+
 	private: System::Void setAddressToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		
 	}
