@@ -23,7 +23,8 @@ using namespace jrtplib;
 
 //alloe use of old function for simplicity
 
-
+uint16_t			destination_port = 6002;
+uint16_t			recieve_port = 6000;
 static RTPSession	sess;
 char				devices_str[NUM_MAX_DEVICES][STR_BUFF_SZ];
 RTPIPv4Address		devices_addr[NUM_MAX_DEVICES];
@@ -123,7 +124,7 @@ void MyForm::pollPackets(){
 					}
 					if (!placed && num_clients < 10){
 						strcpy_s(client_str[num_clients], STR_BUFF_SZ, sup->name);
-						RTPIPv4Address tmp = RTPIPv4Address(sup->address, 6000);
+						RTPIPv4Address tmp = RTPIPv4Address(sup->address, destination_port);
 						memcpy(&clients_addr[num_clients], &tmp, sizeof(RTPIPv4Address));
 						ret = num_clients;
 						num_clients++;
@@ -142,9 +143,9 @@ void MyForm::pollPackets(){
 						gcnew String(&client_str[9][0]),
 					});
 					this->Clients->EndUpdate();
-					sess.AddDestination(RTPIPv4Address(sup->address, 6000));
+					sess.AddDestination(RTPIPv4Address(sup->address, destination_port));
 					send_ack(&ret);
-					sess.DeleteDestination(RTPIPv4Address(sup->address, 6000));
+					sess.DeleteDestination(RTPIPv4Address(sup->address, destination_port));
 					break;
 					}
 
@@ -162,7 +163,7 @@ void MyForm::pollPackets(){
 					if (!placed && num_devices < 10){
 						strcpy_s(devices_str[num_devices], STR_BUFF_SZ, sup->name);
 						printf("got device at %u \n", sup->address);
-						RTPIPv4Address tmp = RTPIPv4Address(sup->address, 6000);
+						RTPIPv4Address tmp = RTPIPv4Address(sup->address, destination_port);
 						memcpy(&devices_addr[num_devices], &tmp, sizeof(RTPIPv4Address));
 						ret = num_devices;
 						num_devices++;
@@ -182,16 +183,16 @@ void MyForm::pollPackets(){
 						gcnew String(&devices_str[9][0]),
 					});
 					this->Devices->EndUpdate();
-					sess.AddDestination(RTPIPv4Address(sup->address, 6000));
+					sess.AddDestination(RTPIPv4Address(sup->address, destination_port));
 					send_ack(&ret);
-					sess.DeleteDestination(RTPIPv4Address(sup->address, 6000));
+					sess.DeleteDestination(RTPIPv4Address(sup->address, destination_port));
 					break;
 					}
 				case GET_DEV: {
 					//printf("GOT ID GET DEV \n");
 					devPacket devp;
 					for (idx = 0; idx < NUM_MAX_DEVICES; idx++){
-						if (idx < NUM_MAX_DEVICES){
+						if (idx < num_devices){
 							strcpy_s(&devp.devices[idx][0], STR_BUFF_SZ, &devices_str[idx][0]);
 						}
 						else{
@@ -201,7 +202,7 @@ void MyForm::pollPackets(){
 					//printf("%i", (uint32_t *)pack->GetPayloadData());
 					uint32_t temp_32;
 					memcpy(&temp_32, (uint32_t*)pack->GetPayloadData(), 4);
-					RTPIPv4Address tmp = RTPIPv4Address( temp_32, 6000);
+					RTPIPv4Address tmp = RTPIPv4Address( temp_32, destination_port);
 					//printf(" %u \n", temp_32 );
 					checkerror( sess.AddDestination(tmp));
 					checkerror( sess.SendPacketEx(&devp, sizeof(devPacket), SET_DEV, 0, 0) );
@@ -323,8 +324,8 @@ int main(array<System::String ^> ^args)
 	inet_pton(AF_INET, "239.255.255.250", &destip);
 	destip = ntohl(destip);
 
-	portbase = 6000;
-	destport = 6000;
+	portbase = recieve_port;
+	destport = destination_port;
 
 	RTPUDPv4TransmissionParams transparams;
 	RTPSessionParams sessparams;
